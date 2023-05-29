@@ -5,22 +5,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'dailymix-images.scdn.co',
-        port: '',
-        pathname: '/*/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'i.scdn.co',
-        port: '',
-        pathname: '/*/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'mosaic.scdn.co',
-        port: '',
-        pathname: '/*/**',
-      },
+        hostname: '**',
+      }
     ],
   }
 }

@@ -17,7 +17,7 @@ export default function App({
         className={`h-screen grid grid-rows-[1fr_auto] grid-cols-[auto_1fr] p-8 pb-0 gap-2 text-white ${inter.className}`}
       >
         <Sidebar />
-        <section className='bg-dark rounded-xl p-4'>
+        <section className='bg-dark rounded-xl px-4 overflow-auto'>
           <Topbar />
           <Component {...pageProps} />
         </section>
