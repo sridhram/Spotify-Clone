@@ -28,7 +28,7 @@ const playListDetails = () => {
     },[session, playlistId])
 
     return(
-        <section className='bg-dark rounded-xl p-4'>
+        <section className=''>
             {playlist ? 
                 <>
                     <section>
@@ -45,7 +45,12 @@ const playListDetails = () => {
                     <section>
                         {playlist.tracks.items.map((song, index) => {
                             return(
-                                <div key={song.track.id}>{song.track.name}</div>
+                                <div key={song.track.id} className='flex gap-4 mb-2'>
+                                    <span>{index+1}</span>
+                                    <Image src={song.track.album.images[2].url} width={40} height={40} alt="song image" />
+                                    <span>{song.track.name}</span>
+                                    <span>{song.track.album.name}</span>
+                                </div>
                             )
                         })}
                     </section>
