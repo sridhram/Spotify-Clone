@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import {useSession} from 'next-auth/react'
 import Image from 'next/image';
 import Link from 'next/link';
-import {MusicalNoteIcon} from '@heroicons/react/24/outline'
+import {MusicalNoteIcon, ClockIcon} from '@heroicons/react/24/outline'
 
 const playListDetails = () => {
     
@@ -11,6 +11,12 @@ const playListDetails = () => {
     const playlistId = router.query.playlistId;
     const {data: session} = useSession();
     const [playlist,setPlaylist] = useState(null);
+
+    function millisToMinutesAndSeconds(millis) {
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    }
 
     useEffect(() => {
         async function f(){
@@ -22,7 +28,6 @@ const playListDetails = () => {
                 });
                 const data = await response.json();
                 setPlaylist(data)
-                console.log(data);
             }
         }
         f();
@@ -43,15 +48,28 @@ const playListDetails = () => {
                             </div>
                         </div>
                     </section>
-                    <section>
+                    <section className='mt-8 mb-4 ml-4'>
+                        <div className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center sticky top-[84px] bg-dark pb-2'>
+                            <span>#</span>
+                            <span>Title</span>
+                            <span>Album</span>
+                            <span className='mx-auto'><ClockIcon className='w-5 h-5' /></span>
+                        </div>
                         {playlist.tracks.items.map((song, index) => {
                             return(
-                                <div key={song.track.id} className='flex gap-4 mb-2'>
-                                    <span>{index+1}</span>
-                                    {console.log(song)}
-                                    {(song.track.album.images.length !== 0) ? <Image src={song.track.album.images[0].url} width={40} height={40} alt="song image" /> : <MusicalNoteIcon className='w-10 h-10' /> }
-                                    <span>{song.track.name}</span>
-                                    <span>{song.track.album.name}</span>
+                                <div key={song.track.id} className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center'>
+                                    <span className='text-white/75'>{index+1}</span>
+                                    <section className='flex gap-2 items-center'>
+                                        {(song.track.album.images.length !== 0) ? <Image src={song.track.album.images[0].url} className='w-10 h-10' width={40} height={40} alt="song image" /> : <MusicalNoteIcon className='w-10 h-10' /> }
+                                        <div className='flex flex-col overflow-hidden whitespace-nowrap'>
+                                            <span>{song.track.name}</span>
+                                            <span className='overflow-hidden text-ellipsis text-white/75 text-sm'>{song.track.artists.map((artist, index, artists) => {
+                                                return (<><Link key={artist.id} href={`/artist/${artist.id}`} className='inline-block hover:underline'>{`${artist.name}`}</Link>{index !== artists.length-1 ? ', ': ' '}</>)
+                                            })}</span>
+                                        </div>
+                                    </section>
+                                    <Link href={`/album/${song.track.album.id}`} className='text-ellipsis overflow-hidden text-sm whitespace-nowrap text-white/75 hover:underline' title={song.track.album.name}>{song.track.album.name}</Link>
+                                    <span className='text-white/75 text-center text-sm'>{millisToMinutesAndSeconds(song.track.duration_ms)}</span>
                                 </div>
                             )
                         })}
