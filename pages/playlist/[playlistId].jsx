@@ -39,17 +39,17 @@ const playListDetails = () => {
                 <>
                     <section>
                         <div className='flex gap-4 '>
-                            <Image alt='playlist image' className='w-48 h-48' src={playlist.images[0].url} width={190} height={190} />
+                            {playlist.images.length === 0 ? <MusicalNoteIcon className='w-48 h-48' /> : <Image alt='playlist image' className='w-48 h-48' src={playlist.images[0].url} width={190} height={190} />}
                             <div className='flex flex-col gap-4 overflow-hidden whitespace-nowrap justify-end'>
                                 <p className='text-sm capitalize'>{playlist.type}</p>
-                                <h1 className="text-6xl font-bold overflow-hidden text-ellipsis" title={playlist.name} >{playlist.name}</h1>
+                                <h1 className="text-6xl font-bold overflow-hidden text-ellipsis leading-normal" title={playlist.name} >{playlist.name}</h1>
                                 <p className="text-white/75 text-sm overflow-hidden text-ellipsis" title={playlist.description} >{playlist.description}</p>
                                 <Link className='hover:underline text-sm capitalize' href={`/user/${playlist.owner.id}`} user_name={playlist.owner.display_name}>{playlist.owner.display_name}</Link>
                             </div>
                         </div>
                     </section>
-                    <section className='mt-8 mb-4 ml-4'>
-                        <div className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center sticky top-[84px] bg-dark pb-2'>
+                    <section className='mt-8 mb-4'>
+                        <div className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center sticky top-[84px] bg-dark p-2 border-b-[1px] border-[hsla(0,0%,100%,.1)]'>
                             <span>#</span>
                             <span>Title</span>
                             <span>Album</span>
@@ -57,7 +57,7 @@ const playListDetails = () => {
                         </div>
                         {playlist.tracks.items.map((song, index) => {
                             return(
-                                <div key={song.track.id} className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center'>
+                                <div key={song.track.id} className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center p-2 rounded-lg hover:bg-highlight'>
                                     <span className='text-white/75'>{index+1}</span>
                                     <section className='flex gap-2 items-center'>
                                         {(song.track.album.images.length !== 0) ? <Image src={song.track.album.images[0].url} className='w-10 h-10' width={40} height={40} alt="song image" /> : <MusicalNoteIcon className='w-10 h-10' /> }
