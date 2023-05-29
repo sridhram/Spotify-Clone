@@ -39,7 +39,6 @@ const ArtistDetails = () => {
                     }
                 });
                 const data = await response.json();
-                console.log(data);
                 setArtistAlbums(data);
             }
         }
