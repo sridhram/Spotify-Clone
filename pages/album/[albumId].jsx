@@ -39,7 +39,7 @@ const albumDetails = () => {
             <div className='flex flex-col gap-4 overflow-hidden'>
                 <p className='text-white/75 capitalize'>{albumDetails.type}</p>
                 <h2 className='text-6xl leading-normal overflow-hidden text-ellipsis whitespace-nowrap' title={albumDetails.name}>{albumDetails.name}</h2>
-                <p className='text-white/75'>{`${albumDetails.label} · ${albumDetails.total_tracks} Songs`}</p>
+                <p className='text-white/75 overflow-hidden text-ellipsis whitespace-nowrap'>{`${albumDetails.label} · ${albumDetails.total_tracks} Songs`}</p>
             </div>
         </section>
         <section className='mt-8 mb-4'>
