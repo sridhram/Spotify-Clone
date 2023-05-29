@@ -19,7 +19,6 @@ async function refreshAccessToken(token) {
       body: params,
     });
     const refreshedToken = await response.json();
-    console.log(refreshedToken);
     return {
       ...token,
       accessToken: refreshedToken.access_token,
@@ -27,7 +26,6 @@ async function refreshAccessToken(token) {
       refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
-    console.error(error);
     return {
       ...token,
       error: 'error refreshing access token',

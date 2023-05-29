@@ -33,7 +33,6 @@ const UserDetails = () => {
                 });
                 const data = await response.json();
                 setUserPlaylists(data)
-                console.log(data);
             }
         }
         getUserDetails();
