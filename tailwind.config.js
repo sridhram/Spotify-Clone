@@ -9,7 +9,8 @@ module.exports = {
     colors:{
       dark:'#121212',
       white:'#fff',
-      highlight:'#1a1a1a'
+      highlight:'#1a1a1a',
+      selectedLink:'hsla(0,0%,100%,.07)'
     },
     extend: {
       backgroundImage: {
