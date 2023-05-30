@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Image from 'next/image'
 import {UserIcon, ChevronDownIcon} from '@heroicons/react/24/outline'
 import {useSession} from 'next-auth/react'
+import { signOut } from 'next-auth/react';
 
 const Topbar = () => {
     const {data: session} = useSession();
@@ -19,13 +20,13 @@ const Topbar = () => {
             <div className='p-2 rounded-full bg-black flex items-center gap-2'>
                 <figure className='p-2 rounded-full bg-dark'>
                 {
-                    (session && session.user.image) ? 
-                        <Image src={session.data.user.image} alt="user profile pic" width={20} height={20} /> 
+                    (currentSession && currentSession.user.image) ? 
+                        <Image src={currentSession.user.image} alt="user profile pic" width={20} height={20} /> 
                     :
                         <UserIcon className='h-5 w-5' />
                 }
                 </figure>
-                <p className='text-sm'>Logout</p>
+                <p className='text-sm cursor-pointer' onClick={signOut}>Logout</p>
                 <ChevronDownIcon className='w-4 h-4' />
             </div>
     </header>
