@@ -3,13 +3,14 @@ import {useSession} from 'next-auth/react'
 import Image from 'next/image';
 import Link from 'next/link';
 import {MusicalNoteIcon,} from '@heroicons/react/24/outline'
-import {PlayCircleIcon} from '@heroicons/react/24/solid'
+import {PlayCircleIcon, PauseCircleIcon} from '@heroicons/react/24/solid'
 
 const Player = () => {
     const {data: session} = useSession();
     const [currentSession, setCurrentSession] = useState(null);
     const [currentSong,setCurrentSong] = useState(null);
     const [progress_ms, setProgress_ms] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     function millisToMinutesAndSeconds(millis) {
         console.log(millis);
@@ -52,6 +53,31 @@ const Player = () => {
         }
         getCurrentPlayingSong();
     },[session])
+
+    async  function resumeSong(){
+            const response = await fetch('https://api.spotify.com/v1/me/player/play',{
+                method: 'PUT',
+                headers:{
+                    Authorization: `Bearer ${session.user.accessToken}`,
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            setIsPlaying(true);
+        }
+
+        async function pauseSong(){
+            const response = await fetch('https://api.spotify.com/v1/me/player/pause',{
+                method: 'PUT',
+                headers:{
+                    Authorization: `Bearer ${session.user.accessToken}`,
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            setIsPlaying(false);
+        }
+
   return (
     currentSession && (
     <footer className='col-span-2 py-2 grid grid-flow-col auto-cols-[33.33%]'>
@@ -73,7 +99,7 @@ const Player = () => {
                 </div>
             </section>
             <section className='flex flex-col items-center gap-1 text-xs text-white/75'>
-                <PlayCircleIcon className='w-8 h-8 cursor-pointer text-white' />
+                { isPlaying ? <PauseCircleIcon onClick={pauseSong} className='w-8 h-8 cursor-pointer text-white' />  : <PlayCircleIcon onClick={resumeSong} className='w-8 h-8 cursor-pointer text-white' />}
                 <div className='flex gap-2 items-center'>
                     <span>{millisToMinutesAndSeconds(progress_ms)}</span>
                     <span className='bg-white/75 w-[23vw] h-1 rounded-sm'></span>

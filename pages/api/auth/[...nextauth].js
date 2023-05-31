@@ -77,10 +77,10 @@ export const authOptions = {
         };
       }
 
-    //   // if the token is valid
-    //   if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
-    //     return token;
-    //   }
+      // if the token is valid
+      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
+        return token;
+      }
 
       return await refreshAccessToken(token);
     },

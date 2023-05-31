@@ -35,6 +35,7 @@ export default function Home() {
         }
         async function getFeaturedPlaylists(){
             if(session && session.user.accessToken){
+              console.log(session);
                 const response = await fetch('https://api.spotify.com/v1/browse/featured-playlists?country=IN&limit=4',{
                     headers:{
                         Authorization:`Bearer ${session.user.accessToken}`
