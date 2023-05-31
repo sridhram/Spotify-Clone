@@ -14,7 +14,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <main
-        className={`h-screen grid grid-rows-[1fr_auto] grid-cols-[auto_1fr] p-8 pb-0 gap-2 text-white ${inter.className}`}
+        className={`h-screen grid grid-rows-[1fr_auto] grid-cols-[auto_1fr] p-4 gap-2 text-white ${inter.className}`}
       >
         <Sidebar />
         <section className='bg-dark rounded-xl px-4 overflow-auto'>

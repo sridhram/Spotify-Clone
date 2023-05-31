@@ -40,6 +40,7 @@ const scopes = [
   'user-read-currently-playing',
   'user-modify-playback-state',
   'user-read-playback-state',
+  'user-read-recently-played'
 ].join(',');
 
 const params = {
@@ -76,12 +77,12 @@ export const authOptions = {
         };
       }
 
-      // if the token is valid
-      if (Date.now() < token.accessTokenExpires) {
-        return token;
-      }
+    //   // if the token is valid
+    //   if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
+    //     return token;
+    //   }
 
-      return refreshAccessToken(token);
+      return await refreshAccessToken(token);
     },
 
     async session({ session, token }) {

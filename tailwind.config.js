@@ -11,7 +11,8 @@ module.exports = {
       white:'#fff',
       highlight:'#1a1a1a',
       selectedLink:'hsla(0,0%,100%,.07)',
-      black:'black'
+      black:'black',
+      green:'#1ed760'
     },
     extend: {
       backgroundImage: {
