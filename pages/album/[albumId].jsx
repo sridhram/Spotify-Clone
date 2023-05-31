@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {MusicalNoteIcon, ClockIcon} from '@heroicons/react/24/outline'
 
-const albumDetails = () => {
+const AlbumDetails = () => {
     const router = useRouter();
     const albumId = router.query.albumId;
     const {data: session} = useSession();
@@ -70,4 +70,4 @@ const albumDetails = () => {
   )
 }
 
-export default albumDetails
+export default AlbumDetails

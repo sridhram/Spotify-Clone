@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {MusicalNoteIcon, ClockIcon} from '@heroicons/react/24/outline'
 
-const playListDetails = () => {
+const PlayListDetails = () => {
     
     const router = useRouter();
     const playlistId = router.query.playlistId;
@@ -81,4 +81,4 @@ const playListDetails = () => {
     )
 }
 
-export default playListDetails;
+export default PlayListDetails;

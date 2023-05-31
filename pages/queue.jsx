@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {MusicalNoteIcon} from '@heroicons/react/24/outline'
 
-const queue = () => {
+const Queue = () => {
 
     const router = useRouter();
     const {data: session} = useSession();
@@ -54,4 +54,4 @@ const queue = () => {
   )
 }
 
-export default queue
+export default Queue
