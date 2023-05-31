@@ -43,7 +43,6 @@ export default function Home() {
                 });
                 const data = await response.json();
                 setFeaturedPlaylists(data);
-                console.log(data);
             }
         }
         getRecentlyPlayedTrack();
