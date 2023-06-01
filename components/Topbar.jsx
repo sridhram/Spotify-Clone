@@ -3,9 +3,12 @@ import Image from 'next/image'
 import {UserIcon} from '@heroicons/react/24/outline'
 import {useSession} from 'next-auth/react'
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const Topbar = () => {
-    const {data: session} = useSession();
+  const router = useRouter();
+  console.log(router);  
+  const {data: session} = useSession();
     const [currentSession, setCurrentSession] = useState(null);
     useEffect(() => {
         if(session){

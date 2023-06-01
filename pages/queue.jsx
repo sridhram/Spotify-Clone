@@ -10,6 +10,12 @@ const Queue = () => {
     const router = useRouter();
     const {data: session} = useSession();
     const [playbackQueue,setPlaybackQueue] = useState(null);
+    function millisToMinutesAndSeconds(millis) {
+
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    }
 
     useEffect(() => {
 
@@ -27,29 +33,52 @@ const Queue = () => {
             }
         }
         getPlaybackQueue();
-    },[session, playbackQueue])
+    },[session])
 
   return (
     <section className='mt-8 mb-4'>
-        {playbackQueue ? playbackQueue.tracks.items.map((song, index) => {
-            return(
-                <div key={song.track.id} className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center p-2 rounded-lg hover:bg-highlight'>
-                    <span className='text-white/75'>{index+1}</span>
+    {playbackQueue ? (
+        <>
+            <div>
+                <h3 className='text-xl font-white/75 font-semibold'>Now Playing</h3>
+                <li key={playbackQueue.currently_playing.id} className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center p-2 rounded-lg hover:bg-highlight'>
+                    <span className='text-white/75'>1</span>
                     <section className='flex gap-2 items-center'>
-                        {(song.track.album.images.length !== 0) ? <Image src={song.track.album.images[0].url} className='w-10 h-10' width={40} height={40} alt="song image" /> : <MusicalNoteIcon className='w-10 h-10' /> }
+                        {(playbackQueue.currently_playing.album.images.length !== 0) ? <Image src={playbackQueue.currently_playing.album.images[0].url} className='w-10 h-10' width={40} height={40} alt="song image" /> : <MusicalNoteIcon className='w-10 h-10' /> }
                         <div className='flex flex-col overflow-hidden whitespace-nowrap'>
-                            <span>{song.track.name}</span>
-                            <span className='overflow-hidden text-ellipsis text-white/75 text-sm'>{song.track.artists.map((artist, index, artists) => {
+                            <span>{playbackQueue.currently_playing.name}</span>
+                            <span className='overflow-hidden text-ellipsis text-white/75 text-sm'>{playbackQueue.currently_playing.album.artists.map((artist, index, artists) => {
                                 return (<><Link key={artist.id} href={`/artist/${artist.id}`} className='inline-block hover:underline'>{`${artist.name}`}</Link>{index !== artists.length-1 ? ', ': ' '}</>)
                             })}</span>
                         </div>
                     </section>
-                    <Link href={`/album/${song.track.album.id}`} className='text-ellipsis overflow-hidden text-sm whitespace-nowrap text-white/75 hover:underline' title={song.track.album.name}>{song.track.album.name}</Link>
-                    <span className='text-white/75 text-center text-sm'>{millisToMinutesAndSeconds(song.track.duration_ms)}</span>
-                </div>
-            )
-        }) : 'Loading...'
-      }
+                    <Link href={`/album/${playbackQueue.currently_playing.album.id}`} className='text-ellipsis overflow-hidden text-sm whitespace-nowrap text-white/75 hover:underline' title={playbackQueue.currently_playing.album.name}>{playbackQueue.currently_playing.album.name}</Link>
+                    <span className='text-white/75 text-center text-sm'>{millisToMinutesAndSeconds(playbackQueue.currently_playing.duration_ms)}</span>
+                </li>
+            </div>
+            <ul>
+                <h3 className='text-xl font-white/75 font-semibold'>Next From : {playbackQueue.queue[0].album.name}</h3>
+                {playbackQueue.queue.map((song, index) => {
+                    return(
+                        <li key={song.id} className=' grid grid-cols-[20px_minmax(63%,_4fr)_2fr_minmax(120px,_1fr)] gap-2 mb-2 items-center p-2 rounded-lg hover:bg-highlight'>
+                            <span className='text-white/75'>{index+2}</span>
+                            <section className='flex gap-2 items-center'>
+                                {(song.album.images.length !== 0) ? <Image src={song.album.images[0].url} className='w-10 h-10' width={40} height={40} alt="song image" /> : <MusicalNoteIcon className='w-10 h-10' /> }
+                                <div className='flex flex-col overflow-hidden whitespace-nowrap'>
+                                    <span>{song.name}</span>
+                                    <span className='overflow-hidden text-ellipsis text-white/75 text-sm'>{song.album.artists.map((artist, index, artists) => {
+                                        return (<><Link key={artist.id} href={`/artist/${artist.id}`} className='inline-block hover:underline'>{`${artist.name}`}</Link>{index !== artists.length-1 ? ', ': ' '}</>)
+                                    })}</span>
+                                </div>
+                            </section>
+                            <Link href={`/album/${song.album.id}`} className='text-ellipsis overflow-hidden text-sm whitespace-nowrap text-white/75 hover:underline' title={song.album.name}>{song.album.name}</Link>
+                            <span className='text-white/75 text-center text-sm'>{millisToMinutesAndSeconds(song.duration_ms)}</span>
+                        </li>
+                    )})
+                }
+        </ul>
+      </>
+      )  : 'Loading...'}
     </section>
   )
 }
