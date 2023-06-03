@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {useSession} from 'next-auth/react'
 import Image from 'next/image';
 import Link from 'next/link';
 import {MusicalNoteIcon,} from '@heroicons/react/24/outline'
 import {PlayCircleIcon, PauseCircleIcon} from '@heroicons/react/24/solid'
-import debounce from 'lodash.debounce'
+import {QueueListIcon} from '@heroicons/react/24/outline';
 
 const Player = () => {
     const {data: session} = useSession();
@@ -13,6 +13,22 @@ const Player = () => {
     const [progress_ms, setProgress_ms] = useState(0);
     const [duration_ms, setDuration_ms] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const inputRef = useRef();
+
+    function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 
     function millisToMinutesAndSeconds(millis) {
 
@@ -93,25 +109,29 @@ const Player = () => {
                 setIsPlaying(false);
             }
         }
-        function setCurrentSongDuration(time){
-            
-            return millisToMinutesAndSeconds(time);
-        }
-        async function sendSeekRequest(event){
+        function setCurrentSongDuration(){
             const seekPercent = event.target.value;
             const currentSeek = Math.round((duration_ms * seekPercent)/100);
-            const response = await fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${currentSeek}`,{
+            sendDebouncedSeekRequest(currentSeek);
+        }
+        async function sendSeekRequest(seek){
+            const response = await fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${seek}`,{
                 method: 'PUT',
                 headers:{
                     Authorization: `Bearer ${session.user.accessToken}`,
                 }
             });
-            console.log(response.status)
+            if(response.status === 204){
+                inputRef.current.value = getDurationPercentage(seek);
+            }
         }
 
         function getDurationPercentage(time){
             return (time * 100)/duration_ms;
         }
+        const sendDebouncedSeekRequest = debounce((seek) => {
+            sendSeekRequest(seek);
+        }, 300);
 
   return (
     currentSession && (
@@ -138,11 +158,13 @@ const Player = () => {
                 <div className='flex gap-2 items-center'>
                     <span>{millisToMinutesAndSeconds(progress_ms)}</span>
                     {/* <span className='bg-white/75 w-[23vw] h-1 rounded-sm'></span> */}
-                    <input type="range" className='bg-white/75 w-[23vw]' min={0} max={100} value={getDurationPercentage(progress_ms)} onInput={sendSeekRequest} />
+                    <input ref={inputRef} type="range" className='bg-white/75 w-[23vw]' min={0} max={100} value={getDurationPercentage(progress_ms)} onChange={setCurrentSongDuration} />
                     <span>{millisToMinutesAndSeconds(currentSong.duration_ms)}</span>
                 </div>
             </section>
-            <section></section>
+            <section className='justify-self-end self-center pr-4 cursor-pointer'>
+                <Link href='/queue'> <QueueListIcon className='w-7 h-7' /></Link>
+            </section>
         </> :
         <div>Loading...</div>
         }

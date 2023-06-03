@@ -70,7 +70,7 @@ export default function Home() {
           <div className='flex gap-4 flex-wrap'>
             {recentlyPlayed.items.map((track) => {
               return(
-                  <Link href={track.context.type === 'playlist' ? `/playlist/${track.context.uri.split(':')[2]}` : `/album/${track.context.uri.split(':')[2]}`} key={track.track.id} className='flex flex-col gap-2 bg-highlight py-4 px-6 m-auto rounded-lg w-[190px] hover:bg-selectedLink'>
+                  <Link href={track.context ? (track.context.type === 'playlist' ? `/playlist/${track.context.uri.split(':')[2]}` : `/album/${track.context.uri.split(':')[2]}`) : '/'} key={track.track.id} className='flex flex-col gap-2 bg-highlight py-4 px-6 m-auto rounded-lg w-[190px] hover:bg-selectedLink'>
                         <Image src={track.track.album.images[0].url} alt='playlist image' className='w-36 h-36 m-auto' width={144} height={144} />
                       <h1 className='text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis' title={track.track.name}>{track.track.name}</h1>
                       <span className='text-white/75 overflow-hidden whitespace-nowrap text-ellipsis' title={getArtistString(track)}>{getArtistString(track)}</span>
